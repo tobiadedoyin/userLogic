@@ -37,7 +37,40 @@ class User{
    }catch(error: any){
     console.log(error.message)
     return res.status(500).json(error.message)
-   }
+   } 
+  }
+
+  static async login(req:Request, res:Response){
+    try{
+      const {email, password} = req.body
+
+      if(!email ||  !password){
+        return handleResponse(res, apiCodes.forbidden, "username and password cannot be empty")
+      }
+
+      const existUser = await getUserByEmail(email).select('+authentication.salt +authentication.password')
+      console.log(existUser)
+      if(!existUser){
+        return handleResponse(res, apiCodes.notFound, "email not found")
+      }
+     
+      const expectedHash = authentication(existUser.authentication.salt, password)
+
+      if(existUser.authentication.password !== expectedHash ){
+        return handleResponse(res, apiCodes.notFound, "incorrect password")
+      }
+
+      const salt = random;
+      existUser.authentication.sessionToken = authentication(salt, existUser._id.toString())
+
+      await existUser.save()
+      res.cookie("auth", existUser.authentication.sessionToken, {domain: "localhost", path: "/"})
+      return handleResponse(res, apiCodes.success, `WELCOME ${existUser.username}`, existUser)
+
+    }catch(error: any){
+      console.log(error.message)
+      return handleResponse(res, apiCodes.serverError, `${error.message}`, );
+    }
     
   }
 }

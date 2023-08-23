@@ -4,7 +4,7 @@ import UserModel from "../model/userModel";
 export const getUser = () => UserModel.find();
 export const getUserByEmail = (email: string) => UserModel.findOne({email}) 
 export const getUserById = (id: string) => UserModel.findById(id)
-export const getUserBySssionToken = (sessionToken: string) => UserModel.findOne({
+export const getUserBySessionToken = (sessionToken: string) => UserModel.findOne({
 "authentication.sessionToken": sessionToken,
 })
 export const createUser = (values: Record<string, any>) => new UserModel(values).save().then((user)=> user.toObject())
