@@ -1,5 +1,5 @@
-import UserModel from "model/userModel";
-import { apiCodes } from "utils/apiCodes";
+import UserModel from "../model/userModel";
+//import { apiCodes } from "utils/apiCodes";
 
 export const getUser = () => UserModel.find();
 export const getUserByEmail = (email: string) => UserModel.findOne({email}) 

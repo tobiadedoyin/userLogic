@@ -1,24 +1,34 @@
 import mongoose from "mongoose"
 
-const UserSchema = new mongoose.Schema({
+export interface IUser {
+  username: string,
+  email: string,
+  password: string
+  authentication: {}
+}
+
+const UserSchema = new mongoose.Schema<IUser>({
   username:{
     type: String,
-    required: true
+    required: true,
+    set: (value: string) => value.toLowerCase().trim()
   },
   email:{
     type: String,
     required: true,
     unique: true,
+    set: (value: string) => value.toLowerCase().trim()
   },
   authentication:{
-    password: {type: true, required: true, select: false},
-    sessionToken:  {type: true, required: true, select: false}
+    password: {type: String, required: true, select: false},
+    salt:{type:String, select: false},
+    sessionToken:  {type: String,  select: false}
   },
 },
 {
   timestamps: true
 }
 )
-const UserModel = mongoose.model("User", UserSchema)
+const UserModel = mongoose.model<IUser>("User", UserSchema)
 
 export default  UserModel
