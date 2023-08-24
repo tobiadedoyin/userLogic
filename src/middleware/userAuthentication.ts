@@ -1,9 +1,11 @@
 import crypto from "crypto";
 import { Response } from "express";
+import { config } from "dotenv";
+config()
 
 export const random = crypto.randomBytes(128).toString('base64')
-const SECRET = "mac-anthony-tobilearning"
-//console.log(SECRET)
+const SECRET =process.env.SECRET || "tobilearning"
+
 export const authentication = (salt: string, password: string)=>{
   return crypto.createHmac("sha256", [salt, password].join("/")).update(SECRET).digest("hex")
 }

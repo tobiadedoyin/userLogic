@@ -33,7 +33,6 @@ return next()
 interface AuthenticatedRequest extends Request {
   identity?: {
     _id: string;
-    // Other properties related to user identity
   };
 }
 
