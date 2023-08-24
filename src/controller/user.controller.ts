@@ -49,7 +49,7 @@ class User{
       }
 
       const existUser = await getUserByEmail(email).select('+authentication.salt +authentication.password')
-      console.log(existUser)
+
       if(!existUser){
         return handleResponse(res, apiCodes.notFound, "email not found")
       }
